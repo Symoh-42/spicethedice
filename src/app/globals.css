@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@theme {
+  --color-near-black: #050505;
+  --color-charcoal: #111111;
+  --color-bg: #080808;
+  --color-text: #f5f5f5;
+  --color-muted: #a1a1aa;
+  --color-accent: #ef233c;
+  --color-accent-dim: #7a1220;
+
+  --font-heading: var(--font-space-grotesk);
+  --font-body: var(--font-manrope);
+  --font-serif: var(--font-dm-serif);
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-grain: grain 8s steps(10) infinite;
+}
+
+* {
+  border-color: rgb(255 255 255 / 0.08);
+}
+
+html {
+  background: var(--color-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-near-black);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* Cinematic film grain overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: var(--animate-grain);
+}
+
+@keyframes grain {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(-2%, -4%);
+  }
+  30% {
+    transform: translate(3%, 2%);
+  }
+  50% {
+    transform: translate(-3%, 3%);
+  }
+  70% {
+    transform: translate(2%, -3%);
+  }
+  90% {
+    transform: translate(-2%, 2%);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Letterboxing — cinematic bars */
+.letterbox::before,
+.letterbox::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: clamp(10px, 2.5vw, 28px);
+  background: var(--color-near-black);
+  z-index: 20;
+}
+
+.letterbox::before {
+  top: 0;
+}
+
+.letterbox::after {
+  bottom: 0;
+}
+
+/* Custom cursor — desktop, pointer:fine only */
+@media (hover: hover) and (pointer: fine) {
+  .cursor-none-desktop {
+    cursor: none;
+  }
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .grain-overlay {
+    animation: none;
+  }
+}
